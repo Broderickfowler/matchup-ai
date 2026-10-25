@@ -72,6 +72,7 @@ Activity mode:
 
 ## Revisions
 
+- Slice 4 implementation pushed to `main` at commit `3826c93`: Gemini structured parsing and evidence-bound explanations are wired behind `GEMINI_API_KEY`, while deterministic code remains the sole authority for scores. Local fallback remains active when the key is absent or Gemini fails. Final Mac build and AI-path verification are still required before marking Slice 4 complete.
 - Slice 3 implementation pushed to `main` at commit `31b43cb`: ranked homepage picks now come from the deterministic scoring engine, signals are derived from evidence, article cards link to current trusted NFL sources, and pick cards deep-link into the analyzer. Full `npm run build` remains to be confirmed on the learner's Mac because the build container cannot resolve GitHub/npm hosts.
 - Learner feedback after Slice 2: Signals and Articles felt visually incomplete without images. Added local editorial SVG artwork to all three signal cards and all three article cards so the visual layer remains reliable without external image hosting. Learner confirmed the local app and deterministic analyzer work. Early checkpoint closed.
 - Slice 2 framework-route verification used the same package/network workaround as Slice 1. The deterministic kernel itself was executed successfully outside Next.js, including two-sided evidence and the missing-data path.
