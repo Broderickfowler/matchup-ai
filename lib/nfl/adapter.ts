@@ -1,3 +1,4 @@
+import verifiedResults from "@/data/nfl-verified-results.json";
 import { getFallbackSlate } from "@/lib/nfl/fallback";
 import { gamesSchema } from "@/lib/schemas/game";
 import type { Game, GameStatus } from "@/lib/types";
@@ -16,6 +17,17 @@ type ESPNEvent = {
 };
 
 type ESPNScoreboard = { events?: ESPNEvent[] };
+
+type VerifiedResult = {
+  date: string;
+  dateTime: string;
+  away: string;
+  awayName: string;
+  home: string;
+  homeName: string;
+  awayScore: number;
+  homeScore: number;
+};
 
 function nflDateStamp(date = new Date()) {
   const parts = new Intl.DateTimeFormat("en-US", {
@@ -59,20 +71,65 @@ function mapEvent(event: ESPNEvent): Game | null {
   };
 }
 
+function applyVerifiedFinals(games: Game[], date: string): Game[] {
+  const finals = (verifiedResults as VerifiedResult[]).filter((item) => item.date === date);
+  if (!finals.length) return games;
+
+  const merged = [...games];
+
+  for (const final of finals) {
+    const index = merged.findIndex(
+      (game) =>
+        game.awayTeam.abbreviation === final.away &&
+        game.homeTeam.abbreviation === final.home
+    );
+
+    const verifiedGame: Game = {
+      id: index >= 0 ? merged[index].id : `verified-${final.date}-${final.away.toLowerCase()}-${final.home.toLowerCase()}`,
+      dateTime: index >= 0 ? merged[index].dateTime : final.dateTime,
+      status: "final",
+      awayTeam: index >= 0 ? merged[index].awayTeam : {
+        id: final.away.toLowerCase(),
+        abbreviation: final.away,
+        name: final.awayName
+      },
+      homeTeam: index >= 0 ? merged[index].homeTeam : {
+        id: final.home.toLowerCase(),
+        abbreviation: final.home,
+        name: final.homeName
+      },
+      awayScore: final.awayScore,
+      homeScore: final.homeScore
+    };
+
+    if (index >= 0) merged[index] = verifiedGame;
+    else merged.push(verifiedGame);
+  }
+
+  return merged.sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime());
+}
+
 export async function getNFLSlate(): Promise<{ games: Game[]; source: "live" | "fallback" }> {
+  const date = nflDateStamp();
+
   try {
-    const date = nflDateStamp();
     const response = await fetch(
-      `https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=${date}`,
-      { next: { revalidate: 60 } }
+      `https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=${date}&_=${Date.now()}`,
+      {
+        cache: "no-store",
+        headers: { "Cache-Control": "no-cache" }
+      }
     );
     if (!response.ok) throw new Error(`Scoreboard request failed: ${response.status}`);
+
     const payload = (await response.json()) as ESPNScoreboard;
     const normalized = (payload.events ?? []).map(mapEvent).filter((game): game is Game => Boolean(game));
-    const games = gamesSchema.parse(normalized);
+    const games = gamesSchema.parse(applyVerifiedFinals(normalized, date));
+
     if (!games.length) throw new Error("Live scoreboard returned no games");
     return { games, source: "live" };
   } catch {
-    return { games: getFallbackSlate(), source: "fallback" };
+    const games = gamesSchema.parse(applyVerifiedFinals(getFallbackSlate(), date));
+    return { games, source: "fallback" };
   }
 }

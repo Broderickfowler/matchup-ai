@@ -1,0 +1,42 @@
+[
+  {
+    "date": "20261025",
+    "dateTime": "2026-10-25T13:30:00Z",
+    "away": "PIT",
+    "awayName": "Pittsburgh Steelers",
+    "home": "NO",
+    "homeName": "New Orleans Saints",
+    "awayScore": 16,
+    "homeScore": 10
+  },
+  {
+    "date": "20261025",
+    "dateTime": "2026-10-25T20:05:00Z",
+    "away": "DEN",
+    "awayName": "Denver Broncos",
+    "home": "ARI",
+    "homeName": "Arizona Cardinals",
+    "awayScore": 30,
+    "homeScore": 16
+  },
+  {
+    "date": "20261025",
+    "dateTime": "2026-10-25T20:25:00Z",
+    "away": "GB",
+    "awayName": "Green Bay Packers",
+    "home": "DET",
+    "homeName": "Detroit Lions",
+    "awayScore": 17,
+    "homeScore": 17
+  },
+  {
+    "date": "20261025",
+    "dateTime": "2026-10-25T20:25:00Z",
+    "away": "LAR",
+    "awayName": "Los Angeles Rams",
+    "home": "LV",
+    "homeName": "Las Vegas Raiders",
+    "awayScore": 28,
+    "homeScore": 18
+  }
+]
