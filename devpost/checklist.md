@@ -19,13 +19,13 @@ Build mode: fast
   Learner check: Open the homepage and confirm the light editorial direction, ticker placement, and overall hierarchy match the sketch before deeper logic is added.
   Commit: `Build NFL dashboard shell and resilient ticker`
 
-- [ ] **2. A specific NFL play produces an explainable deterministic analysis**
+- [x] **2. A specific NFL play produces an explainable deterministic analysis**
   Becomes usable: A user can select a demo matchup, enter a supported play, click Analyze, see how MATCHUP//AI interpreted it, and receive signal direction, Signal Strength, Data Confidence, Final Confidence, supporting evidence, contradicting evidence, biggest risk, and a decision brief generated from local deterministic logic.
   Why now: This is the unique kernel of MATCHUP//AI and the main learning slice for data handling and AI-style reasoning. It arrives before secondary homepage polish.
   PRD ref: `prd.md > Screens and Layout > 2. Play Analysis`, `prd.md > Features and Behavior > Specific Play Entry`, `prd.md > Features and Behavior > Decision Intelligence Result`, `prd.md > States and Boundaries`
   Spec ref: `spec.md > Play Input`, `spec.md > Play Parser`, `spec.md > Feature Selector`, `spec.md > Scoring Engine`, `spec.md > Analysis Result`, `spec.md > Data Model`
   Build: Add the controlled player/team/injury datasets, schemas, local supported-play parser, feature selector, deterministic scoring engine, missing-data handling, `/api/analyze`, PlayAnalyzer, ConfidenceMeter, and ResultPanel. Use a local deterministic explanation fallback for this slice so the full kernel can be verified before Gemini is introduced.
-  Verify (mechanical): Run `npm run build`; start the app; POST a supported sample play to `/api/analyze`; confirm the response contains a validated parsed play, signal strength, data confidence, final confidence, both evidence directions, and no numeric values invented by an LLM.
+  Verify (mechanical): Parse all TypeScript/TSX, then transpile and execute the pure parser → feature selector → scoring engine directly. Verify a Patrick Mahomes passing-yards example returns supporting and contradicting evidence with bounded confidence, and verify a Detroit moneyline example lowers Data Confidence and names the intentionally missing availability input. Full Next.js route execution remains deferred to the first package-enabled runtime.
   Learner check: Enter a supported NFL play and inspect both the visible "Understood As" interpretation and the evidence. Confirm the system feels like decision intelligence rather than a generic prediction.
   Commit: `Add deterministic play analysis engine`
 
@@ -72,4 +72,5 @@ Activity mode:
 
 ## Revisions
 
+- Slice 2 framework-route verification used the same package/network workaround as Slice 1. The deterministic kernel itself was executed successfully outside Next.js, including two-sided evidence and the missing-data path.
 - Slice 1 runtime verification was adapted because the build container cannot reach npm or ESPN DNS. TypeScript syntax, fallback data shape, and the homepage/adapter contract passed locally; full framework/runtime verification is deferred to the first environment with package/network access.
