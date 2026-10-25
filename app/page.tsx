@@ -9,15 +9,15 @@ const previewPicks = [
 ];
 
 const previewSignals = [
-  ["01", "ROLE CHANGE", "Usage is moving toward a more concentrated backfield split."],
-  ["02", "MATCHUP", "Recent pressure rate creates a meaningful passing-game constraint."],
-  ["03", "INJURY", "A key designation remains unresolved and lowers data confidence."]
+  { index: "01", title: "ROLE CHANGE", copy: "Usage is moving toward a more concentrated backfield split.", image: "/visuals/signal-role.svg", alt: "Editorial football role-change graphic" },
+  { index: "02", title: "MATCHUP", copy: "Recent pressure rate creates a meaningful passing-game constraint.", image: "/visuals/signal-matchup.svg", alt: "Editorial football matchup graphic" },
+  { index: "03", title: "INJURY", copy: "A key designation remains unresolved and lowers data confidence.", image: "/visuals/signal-injury.svg", alt: "Editorial football injury-status graphic" }
 ];
 
 const previewArticles = [
-  ["TOP GAMES", "Sunday slate: the matchups that deserve the closest read"],
-  ["INJURY REPORT", "Late-week injury designations that can change the board"],
-  ["ROSTER WATCH", "Role changes and transactions worth tracking before kickoff"]
+  { tag: "TOP GAMES", headline: "Sunday slate: the matchups that deserve the closest read", image: "/visuals/article-games.svg", alt: "Editorial Sunday NFL games graphic" },
+  { tag: "INJURY REPORT", headline: "Late-week injury designations that can change the board", image: "/visuals/article-injury.svg", alt: "Editorial NFL injury report graphic" },
+  { tag: "ROSTER WATCH", headline: "Role changes and transactions worth tracking before kickoff", image: "/visuals/article-roster.svg", alt: "Editorial NFL roster watch graphic" }
 ];
 
 export default async function Home() {
@@ -58,9 +58,14 @@ export default async function Home() {
         <section className="section" id="signals">
           <div className="sectionHeader"><div><p className="sectionIndex">02</p><h2>SIGNALS</h2></div><p>What changed, why it matters, and where uncertainty remains.</p></div>
           <div className="signalGrid">
-            {previewSignals.map(([index, title, copy]) => (
-              <article className="signalCard" key={index}>
-                <span className="signalNumber">{index}</span><p className="signalType">{title}</p><h3>{copy}</h3>
+            {previewSignals.map((signal) => (
+              <article className="signalCard" key={signal.index}>
+                <div className="signalVisual"><img src={signal.image} alt={signal.alt} /></div>
+                <div className="signalCardBody">
+                  <span className="signalNumber">{signal.index}</span>
+                  <p className="signalType">{signal.title}</p>
+                  <h3>{signal.copy}</h3>
+                </div>
               </article>
             ))}
           </div>
@@ -74,9 +79,11 @@ export default async function Home() {
         <section className="section" id="articles">
           <div className="sectionHeader"><div><p className="sectionIndex">03</p><h2>READ BEFORE KICKOFF</h2></div><p>Trusted reporting that can change the context around a play.</p></div>
           <div className="articleGrid">
-            {previewArticles.map(([tag, headline]) => (
-              <article className="articleCard" key={tag}>
-                <div className="articleVisual"><span>{tag}</span></div><p className="articleSource">SOURCE LINK / COMING IN SLICE 3</p><h3>{headline}</h3>
+            {previewArticles.map((article) => (
+              <article className="articleCard" key={article.tag}>
+                <div className="articleVisual"><img src={article.image} alt={article.alt} /><span>{article.tag}</span></div>
+                <p className="articleSource">SOURCE LINK / COMING IN SLICE 3</p>
+                <h3>{article.headline}</h3>
               </article>
             ))}
           </div>

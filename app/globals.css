@@ -50,17 +50,23 @@ main { min-height: 100vh; }
 .pickCard p { color: var(--muted); line-height: 1.45; }
 .pickCard a { margin-top: auto; font-size: .74rem; font-weight: 900; text-transform: uppercase; color: var(--blue); }
 .signalGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--ink); border-left: 1px solid var(--ink); }
-.signalCard { min-height: 280px; padding: 24px; border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); display: flex; flex-direction: column; }
+.signalCard { min-height: 340px; border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); display: flex; flex-direction: column; overflow: hidden; background: var(--paper); }
+.signalVisual { height: 148px; border-bottom: 1px solid var(--ink); background: #dce7ff; overflow: hidden; }
+.signalVisual img { width: 100%; height: 100%; display: block; object-fit: cover; }
+.signalCardBody { padding: 20px 24px 24px; display: flex; flex: 1; flex-direction: column; }
 .signalNumber { font-size: .75rem; color: var(--blue); font-weight: 900; }
-.signalType { margin: auto 0 18px; font-size: .72rem; font-weight: 900; letter-spacing: .1em; }
-.signalCard h3 { margin: 0; font-size: 1.45rem; letter-spacing: -.035em; line-height: 1.08; }
+.signalType { margin: 26px 0 12px; font-size: .72rem; font-weight: 900; letter-spacing: .1em; }
+.signalCard h3 { margin: auto 0 0; font-size: 1.45rem; letter-spacing: -.035em; line-height: 1.08; }
 .analyzeBand { margin: 0; padding: 70px 32px; background: var(--navy); color: white; display: grid; grid-template-columns: 1.2fr .8fr; gap: 50px; align-items: end; }
 .analyzePlaceholder { border-top: 1px solid rgba(255,255,255,.4); padding-top: 18px; }
 .analyzePlaceholder span { display: block; color: #8eb2ff; font-size: .72rem; font-weight: 900; letter-spacing: .1em; margin-bottom: 12px; }
 .analyzePlaceholder p { color: #c7d5e4; line-height: 1.5; margin: 0; }
 .articleGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 .articleCard { background: var(--paper); border: 1px solid #ccd3dc; padding-bottom: 24px; }
-.articleVisual { height: 180px; background: linear-gradient(135deg, #dce7ff, #ffffff 60%, #b8cbf7); display: flex; align-items: end; padding: 20px; }
+.articleVisual { height: 200px; position: relative; overflow: hidden; background: #dce7ff; display: flex; align-items: end; }
+.articleVisual img { width: 100%; height: 100%; display: block; object-fit: cover; }
+.articleVisual::after { content: ""; position: absolute; inset: 45% 0 0; background: linear-gradient(to bottom, transparent, rgba(16,42,67,.82)); }
+.articleVisual span { position: absolute; z-index: 1; left: 20px; bottom: 18px; color: white; }
 .articleVisual span, .articleSource { font-size: .68rem; letter-spacing: .1em; font-weight: 900; }
 .articleSource { margin: 22px 22px 10px; color: var(--blue); }
 .articleCard h3 { margin: 0 22px; font-size: 1.45rem; line-height: 1.08; letter-spacing: -.035em; }

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="MATCHUP">
+  <rect width="640" height="360" fill="#EAF0F7"/>
+  <path d="M0 26h640M0 334h640" stroke="#246BFD" stroke-width="4"/>
+  <rect x="78" y="82" width="205" height="196" fill="#102A43"/><rect x="357" y="82" width="205" height="196" fill="#246BFD"/><path d="M287 82h66v196h-66z" fill="#F3F5F7"/><path d="M302 180h36M320 162v36" stroke="#102A43" stroke-width="10"/><circle cx="180" cy="180" r="55" fill="none" stroke="#F3F5F7" stroke-width="12"/><circle cx="460" cy="180" r="55" fill="none" stroke="#F3F5F7" stroke-width="12"/>
+  <text x="44" y="326" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="800" fill="#102A43">MATCHUP</text>
+  <text x="596" y="326" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" fill="#246BFD">SIGNAL 02</text>
+</svg>

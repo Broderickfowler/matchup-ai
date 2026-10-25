@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="SUNDAY SLATE">
+  <rect width="640" height="360" fill="#EAF0F7"/>
+  <path d="M0 26h640M0 334h640" stroke="#246BFD" stroke-width="4"/>
+  <path d="M70 258h500V96H70z" fill="#102A43"/><path d="M320 96v162M70 177h500" stroke="#246BFD" stroke-width="6"/><circle cx="320" cy="177" r="52" fill="none" stroke="#F3F5F7" stroke-width="8"/><path d="M116 70l42 60M524 70l-42 60" stroke="#246BFD" stroke-width="16"/>
+  <text x="44" y="326" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="800" fill="#102A43">SUNDAY SLATE</text>
+  <text x="596" y="326" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" fill="#246BFD">EDITORIAL</text>
+</svg>
