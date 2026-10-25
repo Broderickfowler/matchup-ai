@@ -1,0 +1,38 @@
+[
+  {
+    "id": "pit-no-2026-10-25",
+    "dateTime": "2026-10-25T13:30:00Z",
+    "status": "scheduled",
+    "awayTeam": { "id": "pit", "abbreviation": "PIT", "name": "Pittsburgh Steelers" },
+    "homeTeam": { "id": "no", "abbreviation": "NO", "name": "New Orleans Saints" },
+    "awayScore": null,
+    "homeScore": null
+  },
+  {
+    "id": "ind-min-2026-10-25",
+    "dateTime": "2026-10-25T17:00:00Z",
+    "status": "scheduled",
+    "awayTeam": { "id": "ind", "abbreviation": "IND", "name": "Indianapolis Colts" },
+    "homeTeam": { "id": "min", "abbreviation": "MIN", "name": "Minnesota Vikings" },
+    "awayScore": null,
+    "homeScore": null
+  },
+  {
+    "id": "gb-det-2026-10-25",
+    "dateTime": "2026-10-25T20:25:00Z",
+    "status": "scheduled",
+    "awayTeam": { "id": "gb", "abbreviation": "GB", "name": "Green Bay Packers" },
+    "homeTeam": { "id": "det", "abbreviation": "DET", "name": "Detroit Lions" },
+    "awayScore": null,
+    "homeScore": null
+  },
+  {
+    "id": "kc-sea-2026-10-25",
+    "dateTime": "2026-10-26T00:20:00Z",
+    "status": "scheduled",
+    "awayTeam": { "id": "kc", "abbreviation": "KC", "name": "Kansas City Chiefs" },
+    "homeTeam": { "id": "sea", "abbreviation": "SEA", "name": "Seattle Seahawks" },
+    "awayScore": null,
+    "homeScore": null
+  }
+]

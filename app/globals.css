@@ -1,0 +1,76 @@
+:root {
+  --canvas: #f3f5f7;
+  --paper: #ffffff;
+  --ink: #111111;
+  --blue: #246bfd;
+  --navy: #102a43;
+  --soft: #d9dee5;
+  --muted: #697481;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--canvas); color: var(--ink); font-family: Arial, Helvetica, sans-serif; }
+a { color: inherit; text-decoration: none; }
+button, input, select { font: inherit; }
+main { min-height: 100vh; }
+.pageShell { width: min(1500px, 100%); margin: 0 auto; background: var(--canvas); }
+.topNav { min-height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px 32px; border-bottom: 1px solid #cbd2da; position: sticky; top: 0; z-index: 10; background: rgba(243,245,247,.96); backdrop-filter: blur(14px); }
+.wordmark { font-size: 1.2rem; font-weight: 900; letter-spacing: -.045em; }
+.wordmark span { color: var(--blue); }
+.topNav nav { display: flex; align-items: center; gap: 24px; font-size: .76rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+.navCta { padding: 12px 16px; background: var(--ink); color: white; }
+.ticker { display: grid; grid-template-columns: 130px 1fr; background: var(--blue); color: white; min-height: 86px; }
+.tickerLabel { display: flex; align-items: center; padding: 20px 24px; border-right: 1px solid rgba(255,255,255,.32); font-size: .72rem; font-weight: 900; letter-spacing: .12em; }
+.tickerTrack { display: flex; overflow-x: auto; }
+.tickerGame { min-width: 210px; padding: 18px 22px; border-right: 1px solid rgba(255,255,255,.25); display: flex; flex-direction: column; justify-content: center; gap: 8px; }
+.tickerTeams { display: flex; gap: 9px; align-items: center; font-size: 1.05rem; }
+.tickerTeams span { opacity: .65; font-size: .75rem; }
+.tickerMeta { font-size: .7rem; letter-spacing: .07em; opacity: .82; text-transform: uppercase; }
+.hero { padding: 80px 32px 88px; border-bottom: 1px solid #cbd2da; }
+.eyebrow { margin: 0 0 26px; color: var(--blue); font-size: .72rem; letter-spacing: .14em; font-weight: 900; }
+.heroGrid { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(280px, .7fr); gap: 56px; align-items: end; }
+.hero h1 { margin: 0; font-size: clamp(3.7rem, 8vw, 8.2rem); line-height: .82; letter-spacing: -.075em; max-width: 950px; }
+.hero h1 span { color: var(--blue); }
+.heroCopy { padding-bottom: 10px; }
+.heroCopy p { font-size: 1.08rem; line-height: 1.55; color: #35414d; margin: 0 0 28px; max-width: 420px; }
+.primaryButton { display: inline-block; background: var(--navy); color: white; padding: 16px 20px; font-size: .76rem; font-weight: 900; letter-spacing: .09em; text-transform: uppercase; }
+.section { padding: 70px 32px 82px; border-bottom: 1px solid #cbd2da; }
+.sectionHeader { display: flex; justify-content: space-between; gap: 32px; align-items: end; margin-bottom: 32px; }
+.sectionHeader > div { display: flex; align-items: baseline; gap: 18px; }
+.sectionIndex { color: var(--blue); font-weight: 900; margin: 0; }
+.section h2, .analyzeBand h2 { margin: 0; font-size: clamp(2.2rem, 4vw, 4rem); letter-spacing: -.055em; line-height: .95; }
+.sectionHeader > p { margin: 0; max-width: 420px; color: var(--muted); line-height: 1.45; }
+.pickGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.pickCard { background: var(--paper); border: 1px solid #ccd3dc; padding: 26px; min-height: 315px; display: flex; flex-direction: column; }
+.cardTop { display: flex; justify-content: space-between; gap: 16px; font-size: .74rem; font-weight: 900; letter-spacing: .08em; }
+.signalPill { background: #e9efff; color: #164fc4; padding: 7px 9px; }
+.pickCard h3 { margin: 42px 0 34px; font-size: clamp(2rem, 4vw, 3.5rem); letter-spacing: -.055em; }
+.confidenceRow { border-top: 1px solid var(--soft); border-bottom: 1px solid var(--soft); padding: 13px 0; display: flex; justify-content: space-between; align-items: center; font-size: .72rem; font-weight: 900; letter-spacing: .08em; }
+.confidenceRow strong { font-size: 2rem; color: var(--blue); letter-spacing: -.06em; }
+.pickCard p { color: var(--muted); line-height: 1.45; }
+.pickCard a { margin-top: auto; font-size: .74rem; font-weight: 900; text-transform: uppercase; color: var(--blue); }
+.signalGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--ink); border-left: 1px solid var(--ink); }
+.signalCard { min-height: 280px; padding: 24px; border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); display: flex; flex-direction: column; }
+.signalNumber { font-size: .75rem; color: var(--blue); font-weight: 900; }
+.signalType { margin: auto 0 18px; font-size: .72rem; font-weight: 900; letter-spacing: .1em; }
+.signalCard h3 { margin: 0; font-size: 1.45rem; letter-spacing: -.035em; line-height: 1.08; }
+.analyzeBand { margin: 0; padding: 70px 32px; background: var(--navy); color: white; display: grid; grid-template-columns: 1.2fr .8fr; gap: 50px; align-items: end; }
+.analyzePlaceholder { border-top: 1px solid rgba(255,255,255,.4); padding-top: 18px; }
+.analyzePlaceholder span { display: block; color: #8eb2ff; font-size: .72rem; font-weight: 900; letter-spacing: .1em; margin-bottom: 12px; }
+.analyzePlaceholder p { color: #c7d5e4; line-height: 1.5; margin: 0; }
+.articleGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.articleCard { background: var(--paper); border: 1px solid #ccd3dc; padding-bottom: 24px; }
+.articleVisual { height: 180px; background: linear-gradient(135deg, #dce7ff, #ffffff 60%, #b8cbf7); display: flex; align-items: end; padding: 20px; }
+.articleVisual span, .articleSource { font-size: .68rem; letter-spacing: .1em; font-weight: 900; }
+.articleSource { margin: 22px 22px 10px; color: var(--blue); }
+.articleCard h3 { margin: 0 22px; font-size: 1.45rem; line-height: 1.08; letter-spacing: -.035em; }
+@media (max-width: 850px) {
+  .topNav { align-items: flex-start; }
+  .topNav nav { gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+  .topNav nav a:not(.navCta) { display: none; }
+  .ticker { grid-template-columns: 100px 1fr; }
+  .heroGrid, .analyzeBand { grid-template-columns: 1fr; }
+  .pickGrid, .signalGrid, .articleGrid { grid-template-columns: 1fr; }
+  .sectionHeader { align-items: flex-start; flex-direction: column; }
+  .hero, .section, .analyzeBand { padding-left: 20px; padding-right: 20px; }
+}
