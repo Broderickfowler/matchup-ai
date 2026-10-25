@@ -95,8 +95,14 @@ After submission, the same surface reveals:
 - Mixed
 - Unfavorable
 
+**Signal Strength**
+- How strongly the available evidence supports or opposes the play
+
+**Data Confidence**
+- High, Moderate, or Limited based on completeness and reliability of the available inputs
+
 **Confidence**
-- 0–100 score
+- 0–100 final confidence score that accounts for both signal strength and data completeness
 
 **Why Now**
 - Most important recent development affecting the analysis
@@ -187,7 +193,7 @@ Source: `scope.md > The Unique Kernel`.
 ### Decision Intelligence Result
 
 - The result must show both evidence supporting and evidence contradicting the user's play.
-- Confidence must be presented separately from the written explanation.
+- Signal strength, data confidence, and final confidence must be presented separately so the user can distinguish strong evidence from incomplete evidence.
 - The product must identify the biggest risk rather than hide conflicting information.
 - The result should help the user understand a decision, not merely hand them a pick.
 
@@ -197,7 +203,7 @@ Source: `scope.md > The Unique Kernel`.
 - **Normal analysis** — the user's play is understood and an evidence-based result is displayed.
 - **Unclear play input** — MATCHUP//AI should not silently guess when the play cannot be interpreted with reasonable confidence. The user should be prompted to clarify the play.
 - **No strong homepage picks** — the product shows only plays that clear the system threshold. If only 1 or 2 plays qualify, only those 1 or 2 appear. If none qualify, the section shows a clear "No strong signals right now" state.
-- **Missing data** — assumption for review: the result should identify when evidence is incomplete rather than treating missing information as neutral evidence.
+- **Missing data** — the result must visibly identify incomplete evidence. Missing information is treated as unknown, not neutral. The interface shows a Data Confidence state such as High, Moderate, or Limited and names the important missing inputs.
 - **External articles** — opening an article takes the user to the original publisher.
 
 ## Product Decisions
@@ -209,6 +215,7 @@ Source: `scope.md > The Unique Kernel`.
 - External reporting is preferred for the article cards in V1.
 - The visual identity uses a bright background, black typography, electric/medium blue accents, and deep navy structure rather than the common black sportsbook interface.
 - The product exposes evidence on both sides of a play instead of only promoting a recommendation.
+- Missing data is displayed explicitly through a Data Confidence state rather than silently treated as neutral evidence.
 
 ## What We're Building
 
@@ -225,6 +232,8 @@ The proof of concept must demonstrate:
 - natural-language play input
 - visible interpretation of the play
 - supporting and contradicting evidence
+- signal strength
+- data confidence
 - confidence score
 - biggest risk
 - concise decision brief
@@ -257,6 +266,4 @@ MATCHUP//AI can later expand into additional sports, more prop types, live marke
 
 ## Open Questions
 
-The following assumption should be resolved before this PRD is approved:
-
-1. When important data is unavailable, should MATCHUP//AI visibly label the analysis as having limited evidence rather than lowering the score invisibly?
+None required before technical specification.
