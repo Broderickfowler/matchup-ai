@@ -59,5 +59,5 @@ export type AnalysisResult = {
   biggestRisk: EvidenceSignal | null;
   whyNow: string;
   decisionBrief: string;
-  mode: "demo-deterministic";
+  mode: "demo-deterministic" | "gemini-assisted";
 };

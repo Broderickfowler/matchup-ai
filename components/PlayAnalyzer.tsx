@@ -45,7 +45,7 @@ export function PlayAnalyzer() {
         <label>YOUR PLAY<textarea value={text} onChange={(e) => setText(e.target.value)} rows={4} /></label>
         <p className="inputHint">Try: Patrick Mahomes over 275.5 passing yards, KC moneyline, KC -3.5, or game total over 47.5.</p>
         <button onClick={analyze} disabled={loading}>{loading ? "Analyzing..." : "Analyze Play"}</button>
-        <p className="demoNote">POC MODE: deeper analysis currently uses a controlled demo dataset so every score is inspectable.</p>
+        <p className="demoNote">POC MODE: scores come from the controlled deterministic dataset. Gemini can interpret and explain when GEMINI_API_KEY is configured, but it never calculates the score.</p>
         {error ? <p className="analyzerError">{error}</p> : null}
       </div>
       {result ? <ResultPanel result={result} /> : <div className="resultEmpty"><span>DECISION BRIEF</span><p>Your structured evidence will appear here.</p></div>}
