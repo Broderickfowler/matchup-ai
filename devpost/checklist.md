@@ -51,7 +51,7 @@ Build mode: fast
 
 ## Hands-on Checkpoints
 
-- [ ] Early usable behavior explored — after Slice 2, when the full deterministic core journey is working
+- [x] Early usable behavior explored — after Slice 2, when the full deterministic core journey is working
 - [ ] Final kick-the-tires exploration and feedback completed — after Slice 4
 
 ## Final Review
@@ -72,6 +72,7 @@ Activity mode:
 
 ## Revisions
 
-- Learner feedback after Slice 2: Signals and Articles felt visually incomplete without images. Added local editorial SVG artwork to all three signal cards and all three article cards so the visual layer remains reliable without external image hosting. Awaiting learner retry before closing the early checkpoint.
+- Slice 3 implementation pushed to `main` at commit `31b43cb`: ranked homepage picks now come from the deterministic scoring engine, signals are derived from evidence, article cards link to current trusted NFL sources, and pick cards deep-link into the analyzer. Full `npm run build` remains to be confirmed on the learner's Mac because the build container cannot resolve GitHub/npm hosts.
+- Learner feedback after Slice 2: Signals and Articles felt visually incomplete without images. Added local editorial SVG artwork to all three signal cards and all three article cards so the visual layer remains reliable without external image hosting. Learner confirmed the local app and deterministic analyzer work. Early checkpoint closed.
 - Slice 2 framework-route verification used the same package/network workaround as Slice 1. The deterministic kernel itself was executed successfully outside Next.js, including two-sided evidence and the missing-data path.
 - Slice 1 runtime verification was adapted because the build container cannot reach npm or ESPN DNS. TypeScript syntax, fallback data shape, and the homepage/adapter contract passed locally; full framework/runtime verification is deferred to the first environment with package/network access.
