@@ -1,0 +1,6 @@
+[
+  {"team":"KC","name":"Kansas City Chiefs","powerRating":78,"passOffense":84,"rushOffense":61,"passDefense":69,"rushDefense":72,"pace":67,"recentScoring":79,"turnoverControl":76,"injuryStability":74},
+  {"team":"SEA","name":"Seattle Seahawks","powerRating":71,"passOffense":73,"rushOffense":68,"passDefense":58,"rushDefense":66,"pace":70,"recentScoring":72,"turnoverControl":63,"injuryStability":69},
+  {"team":"GB","name":"Green Bay Packers","powerRating":75,"passOffense":77,"rushOffense":70,"passDefense":65,"rushDefense":62,"pace":64,"recentScoring":76,"turnoverControl":72,"injuryStability":77},
+  {"team":"DET","name":"Detroit Lions","powerRating":80,"passOffense":82,"rushOffense":79,"passDefense":63,"rushDefense":74,"pace":72,"recentScoring":84,"turnoverControl":75,"injuryStability":71}
+]

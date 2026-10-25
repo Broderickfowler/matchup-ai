@@ -1,5 +1,6 @@
 import { NFLTicker } from "@/components/NFLTicker";
 import { TopNav } from "@/components/TopNav";
+import { PlayAnalyzer } from "@/components/PlayAnalyzer";
 import { getNFLSlate } from "@/lib/nfl/adapter";
 
 const previewPicks = [
@@ -67,7 +68,7 @@ export default async function Home() {
 
         <section className="analyzeBand" id="analyze">
           <div><p className="eyebrow">YOUR PLAY / YOUR EVIDENCE</p><h2>BRING THE PLAY.<br />WE'LL BREAK DOWN THE SIGNAL.</h2></div>
-          <div className="analyzePlaceholder"><span>ANALYZER ARRIVES IN SLICE 2</span><p>The next build slice adds matchup selection, play input, signal scoring, and visible data confidence.</p></div>
+          <PlayAnalyzer />
         </section>
 
         <section className="section" id="articles">

@@ -1,0 +1,6 @@
+[
+  {"id":"patrick-mahomes","name":"Patrick Mahomes","team":"KC","position":"QB","passingYardsRecentAvg":289,"passingVolume":88,"pressureResilience":81,"rushingYardsRecentAvg":24,"rushVolume":34,"receivingYardsRecentAvg":null,"targetShare":null,"roleStability":92},
+  {"id":"jaxon-smith-njigba","name":"Jaxon Smith-Njigba","team":"SEA","position":"WR","passingYardsRecentAvg":null,"passingVolume":null,"pressureResilience":null,"rushingYardsRecentAvg":null,"rushVolume":null,"receivingYardsRecentAvg":73,"targetShare":76,"roleStability":74},
+  {"id":"jordan-love","name":"Jordan Love","team":"GB","position":"QB","passingYardsRecentAvg":261,"passingVolume":80,"pressureResilience":72,"rushingYardsRecentAvg":18,"rushVolume":24,"receivingYardsRecentAvg":null,"targetShare":null,"roleStability":88},
+  {"id":"amon-ra-demo","name":"Amon-Ra St. Brown","team":"DET","position":"WR","passingYardsRecentAvg":null,"passingVolume":null,"pressureResilience":null,"rushingYardsRecentAvg":null,"rushVolume":null,"receivingYardsRecentAvg":86,"targetShare":89,"roleStability":91}
+]

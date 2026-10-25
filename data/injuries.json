@@ -1,0 +1,6 @@
+[
+  {"entity":"KC offensive line","team":"KC","status":"monitor","impactScore":0.32,"present":true,"note":"One protection-related designation remains worth monitoring in the demo dataset."},
+  {"entity":"SEA secondary","team":"SEA","status":"limited","impactScore":0.58,"present":true,"note":"Secondary availability is reduced in the demo dataset."},
+  {"entity":"GB receiving corps","team":"GB","status":"stable","impactScore":0.12,"present":true,"note":"No major receiving-role disruption is represented in the demo dataset."},
+  {"entity":"DET defensive front","team":"DET","status":"unknown","impactScore":null,"present":false,"note":"A high-relevance defensive-front input is intentionally missing to demonstrate Data Confidence."}
+]
