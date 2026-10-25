@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { AnalysisResult } from "@/lib/types";
 import { ResultPanel } from "@/components/ResultPanel";
 
@@ -15,6 +15,14 @@ export function PlayAnalyzer() {
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const requestedMatchup = params.get("matchup");
+    const requestedPlay = params.get("play");
+    if (requestedMatchup && MATCHUPS.some((item) => item.id === requestedMatchup)) setMatchupId(requestedMatchup);
+    if (requestedPlay) setText(requestedPlay);
+  }, []);
 
   async function analyze() {
     setLoading(true); setError(""); setResult(null);

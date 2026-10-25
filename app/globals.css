@@ -118,3 +118,12 @@ main { min-height: 100vh; }
 @media (max-width: 850px) {
   .analyzerGrid, .meterGrid, .evidenceGrid { grid-template-columns: 1fr; }
 }
+
+.pickMetrics { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0 0; }
+.pickMetrics span { padding: 6px 8px; background: #eef2f6; font-size: .68rem; font-weight: 900; letter-spacing: .07em; text-transform: uppercase; }
+.noPicks { border: 1px solid #ccd3dc; background: var(--paper); padding: 30px; }
+.noPicks strong { font-size: 1.5rem; letter-spacing: -.03em; }
+.noPicks p { max-width: 620px; color: var(--muted); line-height: 1.5; margin-bottom: 0; }
+.articleCard { display: block; transition: transform .18s ease, border-color .18s ease; }
+.articleCard:hover { transform: translateY(-3px); border-color: var(--blue); }
+.articleCta { display: block; margin: 18px 22px 0; color: var(--blue); font-size: .7rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }

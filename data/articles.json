@@ -1,0 +1,29 @@
+[
+  {
+    "category": "TOP GAMES",
+    "source": "NFL.com",
+    "published": "Oct 23, 2026",
+    "headline": "NFL Week 7 picks: matchup breakdowns for every game",
+    "url": "https://www.nfl.com/news/nfl-picks-week-7-2026-nfl-season",
+    "image": "/visuals/article-games.svg",
+    "alt": "Editorial Sunday NFL games graphic"
+  },
+  {
+    "category": "INJURY REPORT",
+    "source": "NFL.com",
+    "published": "Oct 25, 2026",
+    "headline": "NFL Week 7 injuries to monitor for Sunday's games",
+    "url": "https://www.nfl.com/news/week-7-injuries-sunday-pregame-2026-nfl-season",
+    "image": "/visuals/article-injury.svg",
+    "alt": "Editorial NFL injury report graphic"
+  },
+  {
+    "category": "ROSTER WATCH",
+    "source": "NFL.com",
+    "published": "Oct 25, 2026",
+    "headline": "2026 NFL transactions: October signings, trades and roster moves",
+    "url": "https://www.nfl.com/transactions/",
+    "image": "/visuals/article-roster.svg",
+    "alt": "Editorial NFL roster watch graphic"
+  }
+]

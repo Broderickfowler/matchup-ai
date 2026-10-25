@@ -2,26 +2,11 @@ import { NFLTicker } from "@/components/NFLTicker";
 import { TopNav } from "@/components/TopNav";
 import { PlayAnalyzer } from "@/components/PlayAnalyzer";
 import { getNFLSlate } from "@/lib/nfl/adapter";
-
-const previewPicks = [
-  { matchup: "KC @ SEA", play: "KC moneyline", confidence: "74", signal: "FAVORABLE" },
-  { matchup: "GB @ DET", play: "Game total over", confidence: "68", signal: "FAVORABLE" }
-];
-
-const previewSignals = [
-  { index: "01", title: "ROLE CHANGE", copy: "Usage is moving toward a more concentrated backfield split.", image: "/visuals/signal-role.svg", alt: "Editorial football role-change graphic" },
-  { index: "02", title: "MATCHUP", copy: "Recent pressure rate creates a meaningful passing-game constraint.", image: "/visuals/signal-matchup.svg", alt: "Editorial football matchup graphic" },
-  { index: "03", title: "INJURY", copy: "A key designation remains unresolved and lowers data confidence.", image: "/visuals/signal-injury.svg", alt: "Editorial football injury-status graphic" }
-];
-
-const previewArticles = [
-  { tag: "TOP GAMES", headline: "Sunday slate: the matchups that deserve the closest read", image: "/visuals/article-games.svg", alt: "Editorial Sunday NFL games graphic" },
-  { tag: "INJURY REPORT", headline: "Late-week injury designations that can change the board", image: "/visuals/article-injury.svg", alt: "Editorial NFL injury report graphic" },
-  { tag: "ROSTER WATCH", headline: "Role changes and transactions worth tracking before kickoff", image: "/visuals/article-roster.svg", alt: "Editorial NFL roster watch graphic" }
-];
+import { getHomepageIntelligence } from "@/lib/analysis/homepage";
 
 export default async function Home() {
   const { games } = await getNFLSlate();
+  const { picks, signals, articles } = getHomepageIntelligence();
 
   return (
     <main id="top">
@@ -42,23 +27,26 @@ export default async function Home() {
 
         <section className="section" id="picks">
           <div className="sectionHeader"><div><p className="sectionIndex">01</p><h2>OUR NFL PICKS</h2></div><p>Only plays that clear the signal threshold make the board.</p></div>
-          <div className="pickGrid">
-            {previewPicks.map((pick) => (
-              <article className="pickCard" key={pick.matchup + pick.play}>
-                <div className="cardTop"><span>{pick.matchup}</span><span className="signalPill">{pick.signal}</span></div>
-                <h3>{pick.play}</h3>
-                <div className="confidenceRow"><span>CONFIDENCE</span><strong>{pick.confidence}</strong></div>
-                <p>Preview content. Slice 3 will replace this with scoring-engine output.</p>
-                <a href="#analyze">View analysis</a>
-              </article>
-            ))}
-          </div>
+          {picks.length ? (
+            <div className="pickGrid">
+              {picks.map((pick) => (
+                <article className="pickCard" key={pick.matchupId + pick.text}>
+                  <div className="cardTop"><span>{pick.matchup}</span><span className="signalPill">{pick.result.direction.toUpperCase()}</span></div>
+                  <h3>{pick.text}</h3>
+                  <div className="confidenceRow"><span>FINAL CONFIDENCE</span><strong>{pick.result.finalConfidence}</strong></div>
+                  <div className="pickMetrics"><span>Signal {pick.result.signalStrength}</span><span>Data {pick.result.dataConfidence}</span></div>
+                  <p>{pick.result.whyNow}</p>
+                  <a href={`/?matchup=${encodeURIComponent(pick.matchupId)}&play=${encodeURIComponent(pick.text)}#analyze`}>View full analysis</a>
+                </article>
+              ))}
+            </div>
+          ) : <div className="noPicks"><strong>NO STRONG SIGNALS RIGHT NOW.</strong><p>The current candidate slate does not clear MATCHUP//AI's minimum signal and data-confidence thresholds.</p></div>}
         </section>
 
         <section className="section" id="signals">
           <div className="sectionHeader"><div><p className="sectionIndex">02</p><h2>SIGNALS</h2></div><p>What changed, why it matters, and where uncertainty remains.</p></div>
           <div className="signalGrid">
-            {previewSignals.map((signal) => (
+            {signals.map((signal) => (
               <article className="signalCard" key={signal.index}>
                 <div className="signalVisual"><img src={signal.image} alt={signal.alt} /></div>
                 <div className="signalCardBody">
@@ -79,12 +67,13 @@ export default async function Home() {
         <section className="section" id="articles">
           <div className="sectionHeader"><div><p className="sectionIndex">03</p><h2>READ BEFORE KICKOFF</h2></div><p>Trusted reporting that can change the context around a play.</p></div>
           <div className="articleGrid">
-            {previewArticles.map((article) => (
-              <article className="articleCard" key={article.tag}>
-                <div className="articleVisual"><img src={article.image} alt={article.alt} /><span>{article.tag}</span></div>
-                <p className="articleSource">SOURCE LINK / COMING IN SLICE 3</p>
+            {articles.map((article) => (
+              <a className="articleCard" key={article.url} href={article.url} target="_blank" rel="noreferrer">
+                <div className="articleVisual"><img src={article.image} alt={article.alt} /><span>{article.category}</span></div>
+                <p className="articleSource">{article.source} / {article.published}</p>
                 <h3>{article.headline}</h3>
-              </article>
+                <span className="articleCta">Read source ↗</span>
+              </a>
             ))}
           </div>
         </section>
