@@ -1,6 +1,6 @@
 ---
 doc: spec
-status: draft
+status: approved
 ---
 
 # MATCHUP//AI — Technical Spec
@@ -662,6 +662,6 @@ means the system does not know the impact.
 
 The build will practice preserving that distinction through raw data, normalization, feature selection, and scoring. Evidence of this learning should be visible in the schemas and scoring tests.
 
-### Pending learner approval
+### Approved implementation stack
 
-- **Implementation stack:** Next.js 16 + TypeScript + Zod + Google GenAI SDK using a configurable Gemini Flash model.
+- **Next.js 16 + TypeScript + Zod + Google GenAI SDK** with a configurable Gemini Flash model.
