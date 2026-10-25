@@ -196,7 +196,7 @@ Source: `scope.md > The Unique Kernel`.
 - **First use** — homepage contains the day's NFL slate, strongest available picks, current signals, article links, and a clear Analyze Your Play action.
 - **Normal analysis** — the user's play is understood and an evidence-based result is displayed.
 - **Unclear play input** — MATCHUP//AI should not silently guess when the play cannot be interpreted with reasonable confidence. The user should be prompted to clarify the play.
-- **No strong homepage picks** — assumption for review: the product should prefer showing fewer than 3 picks, or a clear "No strong signals right now" state, rather than manufacture weak recommendations.
+- **No strong homepage picks** — the product shows only plays that clear the system threshold. If only 1 or 2 plays qualify, only those 1 or 2 appear. If none qualify, the section shows a clear "No strong signals right now" state.
 - **Missing data** — assumption for review: the result should identify when evidence is incomplete rather than treating missing information as neutral evidence.
 - **External articles** — opening an article takes the user to the original publisher.
 
@@ -205,7 +205,7 @@ Source: `scope.md > The Unique Kernel`.
 - NFL is the only sport in V1 to keep the data model and reasoning focused.
 - Users can enter a specific play rather than only compare teams because the product is meant to support an actual decision.
 - Homepage picks are selected automatically by MATCHUP//AI based on scoring logic.
-- Only the strongest 3–5 plays should appear rather than one pick for every game.
+- Only plays that clear the system threshold should appear. The section may contain just 1 or 2 plays when only those qualify.
 - External reporting is preferred for the article cards in V1.
 - The visual identity uses a bright background, black typography, electric/medium blue accents, and deep navy structure rather than the common black sportsbook interface.
 - The product exposes evidence on both sides of a play instead of only promoting a recommendation.
@@ -257,7 +257,6 @@ MATCHUP//AI can later expand into additional sports, more prop types, live marke
 
 ## Open Questions
 
-The following two assumptions should be resolved before this PRD is approved:
+The following assumption should be resolved before this PRD is approved:
 
-1. If fewer than three plays clear the system's strength threshold, should the homepage show fewer picks rather than filling the section with weaker plays?
-2. When important data is unavailable, should MATCHUP//AI visibly label the analysis as having limited evidence rather than lowering the score invisibly?
+1. When important data is unavailable, should MATCHUP//AI visibly label the analysis as having limited evidence rather than lowering the score invisibly?
