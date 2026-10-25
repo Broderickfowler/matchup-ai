@@ -72,5 +72,6 @@ Activity mode:
 
 ## Revisions
 
+- Learner feedback after Slice 2: Signals and Articles felt visually incomplete without images. Added local editorial SVG artwork to all three signal cards and all three article cards so the visual layer remains reliable without external image hosting. Awaiting learner retry before closing the early checkpoint.
 - Slice 2 framework-route verification used the same package/network workaround as Slice 1. The deterministic kernel itself was executed successfully outside Next.js, including two-sided evidence and the missing-data path.
 - Slice 1 runtime verification was adapted because the build container cannot reach npm or ESPN DNS. TypeScript syntax, fallback data shape, and the homepage/adapter contract passed locally; full framework/runtime verification is deferred to the first environment with package/network access.
