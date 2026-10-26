@@ -30,6 +30,22 @@ export async function POST(request: Request) {
   let geminiParsed = false;
   let aiModel: string | null = null;
 
+  const cleanText = body.text.trim();
+  const lowerText = cleanText.toLowerCase();
+  const mentionedPlayer = players.find((player) => {
+    const fullName = player.name.toLowerCase();
+    const lastName = fullName.split(" ").at(-1) ?? fullName;
+    return lowerText.includes(fullName) || lowerText.includes(lastName);
+  });
+  const hasPropDirectionAndLine = /\b(over|under)\s+\d+(?:\.\d+)?\b/i.test(cleanText);
+  const hasSupportedStat = /\b(passing|rushing|receiving)\s+yards?\b/i.test(cleanText);
+
+  if (mentionedPlayer && hasPropDirectionAndLine && !hasSupportedStat) {
+    return NextResponse.json({
+      error: `Please specify the stat type (e.g. passing yards) for ${mentionedPlayer.name}.`
+    }, { status: 422 });
+  }
+
   if (process.env.GEMINI_API_KEY) {
     try {
       const aiParse = await parsePlayWithGemini(body.text, matchup, players);
