@@ -60,4 +60,5 @@ export type AnalysisResult = {
   whyNow: string;
   decisionBrief: string;
   mode: "demo-deterministic" | "gemini-assisted";
+  aiModel?: string | null;
 };

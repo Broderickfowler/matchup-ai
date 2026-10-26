@@ -28,6 +28,7 @@ export async function POST(request: Request) {
 
   let parsed: ParsedPlay | null = null;
   let geminiParsed = false;
+  let aiModel: string | null = null;
 
   if (process.env.GEMINI_API_KEY) {
     try {
@@ -35,6 +36,7 @@ export async function POST(request: Request) {
       if (aiParse?.play) {
         parsed = aiParse.play;
         geminiParsed = true;
+        aiModel = aiParse.model;
       } else if (aiParse?.clarification) {
         return NextResponse.json({ error: aiParse.clarification }, { status: 422 });
       }
@@ -59,7 +61,7 @@ export async function POST(request: Request) {
   }
 
   const deterministic = scorePlay(parsed, evidence);
-  let result = { ...deterministic, mode: geminiParsed ? "gemini-assisted" as const : "demo-deterministic" as const };
+  let result = { ...deterministic, mode: geminiParsed ? "gemini-assisted" as const : "demo-deterministic" as const, aiModel };
 
   if (process.env.GEMINI_API_KEY) {
     try {
@@ -69,7 +71,8 @@ export async function POST(request: Request) {
           ...result,
           whyNow: explanation.whyNow,
           decisionBrief: explanation.decisionBrief,
-          mode: "gemini-assisted"
+          mode: "gemini-assisted",
+          aiModel: explanation.model
         };
       }
     } catch (error) {

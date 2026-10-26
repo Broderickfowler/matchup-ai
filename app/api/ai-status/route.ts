@@ -1,5 +1,5 @@
-import { GoogleGenAI } from "@google/genai";
 import { NextResponse } from "next/server";
+import { GEMINI_MODELS, probeGemini } from "@/lib/ai/gemini";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -10,42 +10,31 @@ function safeError(error: unknown) {
 }
 
 export async function GET() {
-  const apiKey = process.env.GEMINI_API_KEY?.trim();
-  const model = "gemini-3.8-flash";
-
-  if (!apiKey) {
-    return NextResponse.json({
-      geminiConfigured: false,
-      geminiReachable: false,
-      model,
-      environment: process.env.NODE_ENV ?? "unknown",
-      error: "GEMINI_API_KEY is not loaded."
-    });
-  }
-
   try {
-    const ai = new GoogleGenAI({ apiKey });
-    const response = await ai.models.generateContent({
-      model,
-      contents: "Reply with exactly MATCHUP_AI_OK"
-    });
+    const probe = await probeGemini();
 
     return NextResponse.json({
-      geminiConfigured: true,
-      geminiReachable: response.text?.trim() === "MATCHUP_AI_OK",
-      model,
+      geminiConfigured: probe.configured,
+      geminiReachable: probe.reachable,
+      activeModel: probe.model,
+      fallbackOrder: GEMINI_MODELS,
       environment: process.env.NODE_ENV ?? "unknown",
-      response: response.text?.trim() ?? null,
+      response: probe.response,
       error: null
+    }, {
+      headers: { "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0" }
     });
   } catch (error) {
     return NextResponse.json({
-      geminiConfigured: true,
+      geminiConfigured: Boolean(process.env.GEMINI_API_KEY?.trim()),
       geminiReachable: false,
-      model,
+      activeModel: null,
+      fallbackOrder: GEMINI_MODELS,
       environment: process.env.NODE_ENV ?? "unknown",
       response: null,
       error: safeError(error)
+    }, {
+      headers: { "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0" }
     });
   }
 }

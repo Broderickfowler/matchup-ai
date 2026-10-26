@@ -8,7 +8,7 @@ function SignalList({ title, items }: { title: string; items: EvidenceSignal[] }
 export function ResultPanel({ result }: { result: AnalysisResult }) {
   return (
     <section className="resultPanel">
-      <div className="resultTop"><span className={`resultSignal ${result.direction}`}>{result.direction.toUpperCase()}</span><span>{result.mode.toUpperCase()}</span></div>
+      <div className="resultTop"><span className={`resultSignal ${result.direction}`}>{result.direction.toUpperCase()}</span><span>{result.mode.toUpperCase()}{result.aiModel ? ` / ${result.aiModel.toUpperCase()}` : ""}</span></div>
       <p className="resultLabel">UNDERSTOOD AS</p>
       <h3>{result.play.player ? `${result.play.player} ${result.play.direction} ${result.play.threshold} ${result.play.stat?.replaceAll("_", " ")}` : result.play.originalText}</h3>
       <div className="meterGrid">

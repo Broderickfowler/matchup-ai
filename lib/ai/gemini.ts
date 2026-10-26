@@ -5,6 +5,14 @@ import type { AnalysisResult, ParsedPlay, PropStat } from "@/lib/types";
 type Matchup = { id: string; away: string; home: string };
 type PlayerDirectoryEntry = { name: string; team: string };
 
+export const GEMINI_MODELS = [
+  "gemini-3.8-flash",
+  "gemini-3.6-flash",
+  "gemini-3.5-flash-lite"
+] as const;
+
+type GeminiModel = typeof GEMINI_MODELS[number];
+
 const aiParseSchema = z.object({
   canParse: z.boolean(),
   reason: z.string().nullable(),
@@ -50,9 +58,60 @@ const explanationJsonSchema = {
 } as const;
 
 function client() {
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY?.trim();
   if (!apiKey) return null;
   return new GoogleGenAI({ apiKey });
+}
+
+function statusCode(error: unknown) {
+  if (typeof error === "object" && error && "status" in error) {
+    const value = (error as { status?: unknown }).status;
+    return typeof value === "number" ? value : null;
+  }
+  return null;
+}
+
+function isTransient(error: unknown) {
+  const status = statusCode(error);
+  return status === 408 || status === 429 || (status != null && status >= 500);
+}
+
+function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function generateJsonWithFallback(
+  ai: GoogleGenAI,
+  contents: string,
+  responseJsonSchema: object
+): Promise<{ text: string; model: GeminiModel }> {
+  let lastError: unknown = null;
+
+  for (const [index, model] of GEMINI_MODELS.entries()) {
+    const attempts = index === 0 ? 2 : 1;
+
+    for (let attempt = 0; attempt < attempts; attempt++) {
+      try {
+        const response = await ai.models.generateContent({
+          model,
+          contents,
+          config: {
+            responseMimeType: "application/json",
+            responseJsonSchema
+          }
+        });
+
+        if (!response.text) throw new Error(`${model} returned no text.`);
+        return { text: response.text, model };
+      } catch (error) {
+        lastError = error;
+        if (!isTransient(error)) throw error;
+        if (attempt < attempts - 1) await wait(700);
+      }
+    }
+  }
+
+  throw lastError instanceof Error ? lastError : new Error("All Gemini models were unavailable.");
 }
 
 function normalizeTeam(value: string | null, matchup: Matchup) {
@@ -66,7 +125,7 @@ export async function parsePlayWithGemini(
   text: string,
   matchup: Matchup,
   playerDirectory: PlayerDirectoryEntry[]
-): Promise<{ play: ParsedPlay | null; clarification: string | null } | null> {
+): Promise<{ play: ParsedPlay | null; clarification: string | null; model: GeminiModel | null } | null> {
   const ai = client();
   if (!ai) return null;
 
@@ -75,9 +134,7 @@ export async function parsePlayWithGemini(
     .map((player) => `${player.name} (${player.team})`)
     .join(", ");
 
-  const response = await ai.models.generateContent({
-    model: "gemini-3.8-flash",
-    contents: `You parse one NFL play for MATCHUP//AI.
+  const prompt = `You parse one NFL play for MATCHUP//AI.
 
 Selected matchup: ${matchup.away} at ${matchup.home}
 Supported markets: moneyline, spread, game total, passing yards, rushing yards, receiving yards.
@@ -93,41 +150,39 @@ Rules:
 - For game totals, team should be the home team and opponent the away team.
 - For moneyline/spread, direction must be "team".
 - If the request is ambiguous or missing a required line/threshold, set canParse=false and briefly explain what is needed.
-- Return JSON only.`,
-    config: {
-      responseMimeType: "application/json",
-      responseJsonSchema: parseJsonSchema
-    }
-  });
+- Return JSON only.`;
 
-  if (!response.text) throw new Error("Gemini parser returned no text.");
-  const raw = JSON.parse(response.text);
-  const parsed = aiParseSchema.parse(raw);
+  const generated = await generateJsonWithFallback(ai, prompt, parseJsonSchema);
+  const parsed = aiParseSchema.parse(JSON.parse(generated.text));
 
   if (!parsed.canParse) {
-    return { play: null, clarification: parsed.reason ?? "Please make the play more specific." };
+    return {
+      play: null,
+      clarification: parsed.reason ?? "Please make the play more specific.",
+      model: generated.model
+    };
   }
 
   const team = normalizeTeam(parsed.team, matchup);
   const opponent = normalizeTeam(parsed.opponent, matchup);
   if (!team || !opponent || team === opponent || parsed.marketType == null || parsed.direction == null) {
-    return { play: null, clarification: "I need a clearer team, opponent, and market for this matchup." };
+    return { play: null, clarification: "I need a clearer team, opponent, and market for this matchup.", model: generated.model };
   }
 
   if (parsed.marketType === "player_prop") {
     if (!parsed.player || !parsed.stat || parsed.threshold == null || !["over", "under"].includes(parsed.direction)) {
-      return { play: null, clarification: "For a player prop, include the player, over/under, line, and stat." };
+      return { play: null, clarification: "For a player prop, include the player, over/under, line, and stat.", model: generated.model };
     }
     const matchedPlayer = playerDirectory.find(
       (player) => player.name.toLowerCase() === parsed.player?.toLowerCase() && player.team === team
     );
     if (!matchedPlayer) {
-      return { play: null, clarification: "That player is not available in the controlled demo dataset for this matchup." };
+      return { play: null, clarification: "That player is not available in the controlled demo dataset for this matchup.", model: generated.model };
     }
   }
 
   if ((parsed.marketType === "spread" || parsed.marketType === "game_total") && parsed.threshold == null) {
-    return { play: null, clarification: "Include the numeric line so I can evaluate the play." };
+    return { play: null, clarification: "Include the numeric line so I can evaluate the play.", model: generated.model };
   }
 
   return {
@@ -142,7 +197,8 @@ Rules:
       opponent,
       originalText: text.trim()
     },
-    clarification: null
+    clarification: null,
+    model: generated.model
   };
 }
 
@@ -160,9 +216,7 @@ export async function explainWithGemini(result: AnalysisResult) {
     missingInputs: result.missingInputs
   };
 
-  const response = await ai.models.generateContent({
-    model: "gemini-3.8-flash",
-    contents: `Write a concise decision-intelligence explanation for this NFL play.
+  const prompt = `Write a concise decision-intelligence explanation for this NFL play.
 
 Play: ${result.play.originalText}
 Deterministic evidence: ${JSON.stringify(evidence)}
@@ -175,13 +229,38 @@ Hard rules:
 - Do not promise a win, lock, guarantee, or betting outcome.
 - "whyNow" should identify the most important current evidence in 1-2 sentences.
 - "decisionBrief" should summarize the case for and against the play in 2-3 concise sentences.
-- Return JSON only.`,
-    config: {
-      responseMimeType: "application/json",
-      responseJsonSchema: explanationJsonSchema
-    }
-  });
+- Return JSON only.`;
 
-  if (!response.text) throw new Error("Gemini explanation returned no text.");
-  return explanationSchema.parse(JSON.parse(response.text));
+  const generated = await generateJsonWithFallback(ai, prompt, explanationJsonSchema);
+  return {
+    ...explanationSchema.parse(JSON.parse(generated.text)),
+    model: generated.model
+  };
+}
+
+export async function probeGemini() {
+  const ai = client();
+  if (!ai) return { configured: false as const, reachable: false as const, model: null, response: null };
+
+  let lastError: unknown = null;
+
+  for (const model of GEMINI_MODELS) {
+    try {
+      const response = await ai.models.generateContent({
+        model,
+        contents: "Reply with exactly MATCHUP_AI_OK"
+      });
+      return {
+        configured: true as const,
+        reachable: response.text?.trim() === "MATCHUP_AI_OK",
+        model,
+        response: response.text?.trim() ?? null
+      };
+    } catch (error) {
+      lastError = error;
+      if (!isTransient(error)) throw error;
+    }
+  }
+
+  throw lastError instanceof Error ? lastError : new Error("All Gemini models were unavailable.");
 }
