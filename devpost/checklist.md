@@ -39,7 +39,7 @@ Build mode: fast
   Learner check: Scan Our NFL Picks and Signals and confirm every visible recommendation feels earned by evidence, with no filler just to complete the layout.
   Commit: `Generate ranked picks signals and article cards`
 
-- [ ] **4. Gemini handles structured play parsing and evidence-bound explanations with fallbacks**
+- [x] **4. Gemini handles structured play parsing and evidence-bound explanations with fallbacks**
   Becomes usable: With a Gemini key configured locally, natural-language supported plays are parsed into the strict schema and the deterministic result is explained in concise language. Without the key or during an API failure, the supported demo flow still works and is clearly identified as fallback behavior.
   Why now: The deterministic system is already proven, so AI can be added without letting it control scores or hide data problems.
   PRD ref: `prd.md > Features and Behavior > Specific Play Entry`, `prd.md > Features and Behavior > Decision Intelligence Result`, `prd.md > States and Boundaries`
@@ -52,7 +52,7 @@ Build mode: fast
 ## Hands-on Checkpoints
 
 - [x] Early usable behavior explored — after Slice 2, when the full deterministic core journey is working
-- [ ] Final kick-the-tires exploration and feedback completed — after Slice 4
+- [x] Final kick-the-tires exploration and feedback completed — after Slice 4
 
 ## Final Review
 
@@ -72,6 +72,7 @@ Activity mode:
 
 ## Revisions
 
+- Gemini end-to-end verification completed on the learner's Mac: `/api/ai-status` reported `geminiReachable: true` using `gemini-3.6-flash` through the fallback chain; a complete Mahomes passing-yards play returned Gemini-assisted analysis, while `Mahomes over 300` correctly requested the missing stat instead of inventing it.
 - Slice 4 implementation pushed to `main` at commit `3826c93`: Gemini structured parsing and evidence-bound explanations are wired behind `GEMINI_API_KEY`, while deterministic code remains the sole authority for scores. Local fallback remains active when the key is absent or Gemini fails. Final Mac build and AI-path verification are still required before marking Slice 4 complete.
 - Slice 3 implementation pushed to `main` at commit `31b43cb`: ranked homepage picks now come from the deterministic scoring engine, signals are derived from evidence, article cards link to current trusted NFL sources, and pick cards deep-link into the analyzer. Full `npm run build` remains to be confirmed on the learner's Mac because the build container cannot resolve GitHub/npm hosts.
 - Learner feedback after Slice 2: Signals and Articles felt visually incomplete without images. Added local editorial SVG artwork to all three signal cards and all three article cards so the visual layer remains reliable without external image hosting. Learner confirmed the local app and deterministic analyzer work. Early checkpoint closed.
