@@ -75,9 +75,9 @@ export async function parsePlayWithGemini(
     .map((player) => `${player.name} (${player.team})`)
     .join(", ");
 
-  const interaction = await ai.interactions.create({
+  const response = await ai.models.generateContent({
     model: "gemini-3.8-flash",
-    input: `You parse one NFL play for MATCHUP//AI.
+    contents: `You parse one NFL play for MATCHUP//AI.
 
 Selected matchup: ${matchup.away} at ${matchup.home}
 Supported markets: moneyline, spread, game total, passing yards, rushing yards, receiving yards.
@@ -94,14 +94,14 @@ Rules:
 - For moneyline/spread, direction must be "team".
 - If the request is ambiguous or missing a required line/threshold, set canParse=false and briefly explain what is needed.
 - Return JSON only.`,
-    response_format: {
-      type: "text",
-      mime_type: "application/json",
-      schema: parseJsonSchema
+    config: {
+      responseMimeType: "application/json",
+      responseJsonSchema: parseJsonSchema
     }
   });
 
-  const raw = JSON.parse(interaction.output_text);
+  if (!response.text) throw new Error("Gemini parser returned no text.");
+  const raw = JSON.parse(response.text);
   const parsed = aiParseSchema.parse(raw);
 
   if (!parsed.canParse) {
@@ -160,9 +160,9 @@ export async function explainWithGemini(result: AnalysisResult) {
     missingInputs: result.missingInputs
   };
 
-  const interaction = await ai.interactions.create({
+  const response = await ai.models.generateContent({
     model: "gemini-3.8-flash",
-    input: `Write a concise decision-intelligence explanation for this NFL play.
+    contents: `Write a concise decision-intelligence explanation for this NFL play.
 
 Play: ${result.play.originalText}
 Deterministic evidence: ${JSON.stringify(evidence)}
@@ -176,12 +176,12 @@ Hard rules:
 - "whyNow" should identify the most important current evidence in 1-2 sentences.
 - "decisionBrief" should summarize the case for and against the play in 2-3 concise sentences.
 - Return JSON only.`,
-    response_format: {
-      type: "text",
-      mime_type: "application/json",
-      schema: explanationJsonSchema
+    config: {
+      responseMimeType: "application/json",
+      responseJsonSchema: explanationJsonSchema
     }
   });
 
-  return explanationSchema.parse(JSON.parse(interaction.output_text));
+  if (!response.text) throw new Error("Gemini explanation returned no text.");
+  return explanationSchema.parse(JSON.parse(response.text));
 }
