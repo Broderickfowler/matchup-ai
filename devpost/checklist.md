@@ -29,7 +29,7 @@ Build mode: fast
   Learner check: Enter a supported NFL play and inspect both the visible "Understood As" interpretation and the evidence. Confirm the system feels like decision intelligence rather than a generic prediction.
   Commit: `Add deterministic play analysis engine`
 
-- [ ] **3. Homepage picks and signals are generated from the same scoring logic**
+- [x] **3. Homepage picks and signals are generated from the same scoring logic**
   Becomes usable: The homepage stops being decorative: candidate plays are run through the scoring engine, only qualifying plays appear, 1 or 2 are shown when only 1 or 2 qualify, signal cards explain high-impact developments, and three trusted-source article cards link out to publishers.
   Why now: Reusing the same engine proves the product has one coherent intelligence system instead of separate hardcoded homepage recommendations.
   PRD ref: `prd.md > Features and Behavior > Our NFL Picks`, `prd.md > Features and Behavior > Signals`, `prd.md > Features and Behavior > Articles`, `prd.md > States and Boundaries`
@@ -60,18 +60,19 @@ Build mode: fast
 
 ## Code Tour and App Map
 
-- [ ] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
-- [ ] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
-- [ ] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
+- [x] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
+- [x] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
+- [x] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
 
-Activity and evidence: 
-Route and stops: 
-Edit outcome: 
-Reflection: 
-Activity mode: 
+Activity and evidence: Learner ran the app locally, identified stale-score and missing-visual defects, configured Gemini, diagnosed a 503 capacity failure, and verified clarification behavior for incomplete plays.
+Route and stops: Input parsing → feature selection → deterministic scoring → missing-data confidence → Gemini explanation → NFL ticker resilience.
+Edit outcome: The learner's feedback directly produced editorial card visuals, live ticker polling/final locks, and resilient Gemini model fallback.
+Reflection: Reusable pattern is to keep AI at the interpretation/explanation boundary while deterministic code owns business-critical scoring.
+Activity mode: Guided build + live debugging recap.
 
 ## Revisions
 
+- Final review note: repository `package-lock.json` still needs the learner's locally updated lockfile pushed after installing `@google/genai@2.31.0`; do not mark Final Review complete until that sync is confirmed.
 - Gemini end-to-end verification completed on the learner's Mac: `/api/ai-status` reported `geminiReachable: true` using `gemini-3.6-flash` through the fallback chain; a complete Mahomes passing-yards play returned Gemini-assisted analysis, while `Mahomes over 300` correctly requested the missing stat instead of inventing it.
 - Slice 4 implementation pushed to `main` at commit `3826c93`: Gemini structured parsing and evidence-bound explanations are wired behind `GEMINI_API_KEY`, while deterministic code remains the sole authority for scores. Local fallback remains active when the key is absent or Gemini fails. Final Mac build and AI-path verification are still required before marking Slice 4 complete.
 - Slice 3 implementation pushed to `main` at commit `31b43cb`: ranked homepage picks now come from the deterministic scoring engine, signals are derived from evidence, article cards link to current trusted NFL sources, and pick cards deep-link into the analyzer. Full `npm run build` remains to be confirmed on the learner's Mac because the build container cannot resolve GitHub/npm hosts.

@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MATCHUP//AI App Map</title>
+<style>
+:root{--canvas:#f3f5f7;--paper:#fff;--ink:#111;--blue:#246bfd;--navy:#102a43;--soft:#d9dee5;--muted:#697481}
+*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
+main{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:48px 0 80px}
+header{border-top:8px solid var(--blue);padding:28px 0 34px;border-bottom:1px solid #cbd2da}
+.eyebrow{font-size:12px;font-weight:900;letter-spacing:.14em;color:var(--blue);text-transform:uppercase}
+h1{font-size:clamp(48px,8vw,96px);line-height:.84;letter-spacing:-.07em;margin:18px 0}
+h1 span{color:var(--blue)}.lede{font-size:18px;line-height:1.55;color:#35414d;max-width:760px}
+section{padding:46px 0;border-bottom:1px solid #cbd2da}h2{font-size:34px;letter-spacing:-.04em;margin:0 0 24px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.card{background:var(--paper);border:1px solid #cbd2da;padding:22px}
+.card h3{margin:0 0 10px;font-size:20px;letter-spacing:-.025em}.card p,.card li{color:#46515d;line-height:1.55}
+.flow{display:grid;grid-template-columns:repeat(7,minmax(120px,1fr));gap:8px;overflow-x:auto;padding-bottom:8px}
+.step{background:var(--navy);color:white;padding:16px;min-height:118px}.step strong{display:block;color:#8eb2ff;font-size:11px;letter-spacing:.12em;margin-bottom:14px}
+.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#0f1720;color:#e8eef8;padding:14px;overflow:auto;font-size:13px;line-height:1.5}
+.badge{display:inline-block;background:#e9efff;color:#164fc4;padding:6px 8px;font-size:11px;font-weight:900;letter-spacing:.08em;margin-right:6px}
+table{width:100%;border-collapse:collapse;background:white}th,td{border:1px solid #cbd2da;text-align:left;padding:13px;vertical-align:top}th{background:#eef2f6;font-size:12px;letter-spacing:.08em}
+.callout{background:var(--blue);color:white;padding:28px;font-size:24px;line-height:1.25;font-weight:900;letter-spacing:-.03em}
+.small{font-size:13px;color:var(--muted)}
+@media(max-width:800px){.grid{grid-template-columns:1fr}.flow{grid-template-columns:repeat(7,180px)}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div class="eyebrow">MATCHUP//AI / BUILD MAP</div>
+<h1>CODE CALCULATES.<br><span>AI INTERPRETS.</span></h1>
+<p class="lede">This map shows how the NFL decision-intelligence proof of concept moves from raw data to structured evidence, deterministic scoring, and Gemini-assisted explanation without allowing the model to control the score.</p>
+</header>
+
+<section>
+<h2>1. Product Flow</h2>
+<div class="flow">
+<div class="step"><strong>01 INPUT</strong>User selects an NFL matchup and types the exact play.</div>
+<div class="step"><strong>02 PARSE</strong>Gemini interprets natural language into a strict play schema. Local parser is the fallback.</div>
+<div class="step"><strong>03 VALIDATE</strong>Team, opponent, player, stat, direction, and line are checked against the selected matchup and demo dataset.</div>
+<div class="step"><strong>04 FEATURES</strong>The app chooses only evidence relevant to that market: production, usage, matchup, role, injuries, pace, strength, and more.</div>
+<div class="step"><strong>05 SCORE</strong>Deterministic code weights evidence and calculates Signal Strength, Data Confidence, and Final Confidence.</div>
+<div class="step"><strong>06 EXPLAIN</strong>Gemini receives the already-calculated evidence and turns it into a concise Why Now and Decision Brief.</div>
+<div class="step"><strong>07 DISPLAY</strong>The user sees supporting evidence, contradicting evidence, missing inputs, risk, and the model used.</div>
+</div>
+</section>
+
+<section>
+<h2>2. Core Architecture</h2>
+<div class="grid">
+<div class="card"><h3>Presentation Layer</h3><p><span class="badge">app/page.tsx</span><span class="badge">components/*</span></p><p>Homepage, ticker, ranked picks, visual signals, articles, analyzer form, confidence meters, and decision brief.</p></div>
+<div class="card"><h3>API Layer</h3><p><span class="badge">/api/analyze</span><span class="badge">/api/nfl</span><span class="badge">/api/ai-status</span></p><p>Separates browser UI from scoring, live scores, and Gemini connectivity.</p></div>
+<div class="card"><h3>Deterministic Intelligence</h3><p><span class="badge">parseLocalPlay.ts</span><span class="badge">featureSelector.ts</span><span class="badge">score.ts</span></p><p>The inspectable core. Missing data is excluded from directional scoring and separately reduces Data Confidence.</p></div>
+<div class="card"><h3>AI Layer</h3><p><span class="badge">lib/ai/gemini.ts</span></p><p>Structured parsing, clarification, evidence-bound explanation, retries, and model fallback. Current fallback order: 3.8 Flash → 3.6 Flash → 3.5 Flash-Lite.</p></div>
+<div class="card"><h3>Data Layer</h3><p><span class="badge">data/*.json</span></p><p>Controlled teams, players, injuries, candidate plays, articles, demo slate, and verified final scores. This makes the POC reproducible and debuggable.</p></div>
+<div class="card"><h3>NFL Feed Layer</h3><p><span class="badge">lib/nfl/adapter.ts</span><span class="badge">NFLTicker.tsx</span></p><p>Normalizes the live scoreboard, disables stale caching, applies verified final locks, and polls every 30 seconds in the browser.</p></div>
+</div>
+</section>
+
+<section>
+<h2>3. The Scoring Logic</h2>
+<div class="code">weightedEvidence = direction × strength × relevance × recency
+
+netSignal = Σ(weightedEvidence) / Σ(relevance × recency for present inputs)
+
+Signal Strength = |netSignal| × 100
+
+Data Confidence = weighted present inputs / weighted expected inputs × 100
+
+Final Confidence = harmonic mean(Signal Strength, Data Confidence)</div>
+<p class="small">Important: a missing input is not scored as zero. It is marked absent, excluded from the directional signal, and lowers Data Confidence.</p>
+</section>
+
+<section>
+<h2>4. What Gemini Is Allowed To Do</h2>
+<table>
+<thead><tr><th>Gemini can</th><th>Gemini cannot</th></tr></thead>
+<tbody>
+<tr><td>Interpret natural-language plays</td><td>Invent missing lines, stats, players, or teams</td></tr>
+<tr><td>Ask for clarification when a play is incomplete</td><td>Calculate Signal Strength</td></tr>
+<tr><td>Explain evidence already produced by code</td><td>Calculate Data Confidence</td></tr>
+<tr><td>Use a fallback model when a model is overloaded</td><td>Calculate or overwrite Final Confidence</td></tr>
+<tr><td>Summarize supporting and contradicting evidence</td><td>Promise a win, lock, or guaranteed betting outcome</td></tr>
+</tbody>
+</table>
+</section>
+
+<section>
+<h2>5. Failure Handling You Built</h2>
+<div class="grid">
+<div class="card"><h3>Ambiguous Input</h3><p><strong>“Mahomes over 300”</strong> does not silently become passing yards. Gemini asks for the missing stat.</p></div>
+<div class="card"><h3>Model Overload</h3><p>A 503 from Gemini 3.8 no longer breaks the flow. MATCHUP retries and moves through the fallback chain.</p></div>
+<div class="card"><h3>AI Offline</h3><p>Supported structured plays can still use the local deterministic parser and deterministic decision brief.</p></div>
+<div class="card"><h3>Stale Sports Feed</h3><p>The ticker polls every 30 seconds, disables cache, and locks verified finals so completed games cannot regress to LIVE.</p></div>
+<div class="card"><h3>Missing Evidence</h3><p>Unknown values stay unknown. They reduce Data Confidence rather than creating false neutral evidence.</p></div>
+<div class="card"><h3>Secret Management</h3><p><code>.env.local</code> stays outside Git. The status endpoint only reports configuration and connectivity, never the API key.</p></div>
+</div>
+</section>
+
+<section>
+<h2>6. Files Worth Knowing</h2>
+<table>
+<thead><tr><th>File</th><th>Why it matters</th></tr></thead>
+<tbody>
+<tr><td><code>app/api/analyze/route.ts</code></td><td>The orchestration layer: AI parse → fallback parse → evidence → score → AI explanation.</td></tr>
+<tr><td><code>lib/analysis/featureSelector.ts</code></td><td>Turns a market into the right evidence set.</td></tr>
+<tr><td><code>lib/analysis/score.ts</code></td><td>The deterministic decision kernel.</td></tr>
+<tr><td><code>lib/ai/gemini.ts</code></td><td>Structured output, clarification rules, model retries, and explanations.</td></tr>
+<tr><td><code>lib/nfl/adapter.ts</code></td><td>Live-score normalization and final-state protection.</td></tr>
+<tr><td><code>lib/analysis/homepage.ts</code></td><td>Uses the same scoring engine to determine which homepage plays actually qualify.</td></tr>
+<tr><td><code>lib/types.ts</code></td><td>The shared contracts connecting the entire system.</td></tr>
+</tbody>
+</table>
+</section>
+
+<section>
+<h2>7. Learning Recap</h2>
+<div class="callout">RAW DATA → NORMALIZED DATA → DERIVED SIGNALS → DETERMINISTIC SCORE → AI EXPLANATION</div>
+<div class="grid" style="margin-top:18px">
+<div class="card"><h3>Data handling</h3><p>You learned why normalization matters, why null is different from zero, and why confidence should reflect missing evidence.</p></div>
+<div class="card"><h3>AI logic</h3><p>You separated probabilistic language understanding from deterministic business logic. That is the key architectural pattern to reuse.</p></div>
+<div class="card"><h3>Resilience</h3><p>You saw two real-world failures: stale sports data and an overloaded AI model. The product now has explicit fallback behavior for both.</p></div>
+<div class="card"><h3>Debugging</h3><p>You used HTTP status codes, environment diagnostics, Git, build output, API routes, and model fallbacks to isolate failures instead of changing random code.</p></div>
+</div>
+</section>
+
+<section>
+<h2>8. Practice To Reuse</h2>
+<div class="card">
+<h3>Add one new prop market without touching Gemini's scoring authority</h3>
+<ol>
+<li>Add the new stat to <code>PropStat</code> in <code>lib/types.ts</code>.</li>
+<li>Add the relevant raw player/team field to the controlled dataset.</li>
+<li>Teach <code>featureSelector.ts</code> which evidence matters for that stat.</li>
+<li>Let <code>score.ts</code> use the same generic evidence weighting.</li>
+<li>Expand Gemini's parsing schema to recognize the new stat.</li>
+<li>Test one complete play, one contradictory-evidence play, and one ambiguous play.</li>
+</ol>
+<p>The key test: the new market should still work deterministically even if Gemini is unavailable.</p>
+</div>
+</section>
+
+<section>
+<h2>9. Current POC Boundary</h2>
+<p class="lede">NFL only. Controlled deeper-analysis dataset. No bet placement. No autonomous wagering. No sportsbook integration. No complex ML. The purpose is inspectable decision intelligence, not guaranteed outcomes.</p>
+</section>
+</main>
+</body>
+</html>
